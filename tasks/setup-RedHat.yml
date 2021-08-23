@@ -7,3 +7,15 @@
     name: rpcbind
     state: "{{ nfs_rpcbind_state }}"
     enabled: "{{ nfs_rpcbind_enabled }}"
+- name: Open firewall ports
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  notify: "Restart firewalld"
+  loop:
+    - rpc-bind
+    - mountd
+    - nfs
+  ignore_errors: True
